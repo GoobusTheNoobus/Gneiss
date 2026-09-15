@@ -1,0 +1,5 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+PointerAlignment: Left
+AlignConsecutiveAssignments: Consecutive
+AccessModifierOffset: -4

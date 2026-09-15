@@ -1,0 +1,85 @@
+# GNEISS lexer test
+
+# Keywords
+var
+function
+void
+print
+println
+exit
+return
+true
+false
+if
+else
+
+# Identifiers
+hello
+_hello
+hello_world
+variable123
+_my_variable
+
+# Integers
+0
+1
+42
+123456789
+
+# Floats
+0.0
+1.5
+3.14159
+42.25
+
+# Operators
++ - * / %
+= == !=
+> >=
+< <=
+->
+
+# Strings
+"hello world"
+"Hello, GNEISS!"
+"line\nbreak"
+"tab\tcharacter"
+"quote: \""
+"backslash: \\"
+
+# Characters
+'a'
+'Z'
+'0'
+'\n'
+'\t'
+'\\'
+'\''
+'\"'
+
+# Whitespace
+
+var     x     =     123;
+var y=42;
+var z = 3.14;
+
+# Comments
+# This entire line is a comment
+
+var after_comment = 100;
+
+# A small realistic program
+
+function main() -> void {
+    var number = 42;
+    var decimal = 3.14;
+    var message = "Hello, GNEISS!";
+
+    if number >= 40 {
+        println message;
+    } else {
+        print "Something went wrong.";
+    }
+
+    return;
+}
