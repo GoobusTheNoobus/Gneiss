@@ -68,3 +68,8 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# IDE generated folders
+.idea/
+.vscode/
+.vs/
