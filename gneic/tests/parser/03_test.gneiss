@@ -1,0 +1,15 @@
+# expressions
+3 + 5;
+2 + 5 * 5;
+-3 + 5 * -12;
+
+# declaration
+var i = 6 * 7;
+var funny_number : string = "six seven";
+var four = get_number_2(2) * get_number_one_times_whatever_you_put_in(2);
+
+println four;
+
+four = 5; # oh no
+
+(3 + 2) / 5 * 3 - -5;

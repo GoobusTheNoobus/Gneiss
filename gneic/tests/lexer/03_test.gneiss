@@ -1,0 +1,13 @@
+# Test identifiers
+
+foo
+foo_bar
+foo123
+__foo_macro__
+__jerry__
+
+_
+
+println_but_its_not_keyword
+known_2b_true
+if_but_also_not_keyword_idk_why

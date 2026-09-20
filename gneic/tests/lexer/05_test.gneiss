@@ -1,0 +1,8 @@
+# Test string literals
+
+"hello"
+"hello world"
+""
+"hello, Gneiss!\n"
+"123"
+"foo_bar"

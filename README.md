@@ -1,26 +1,46 @@
 # Gneiss Programming Language
-A minimal toy programming language written in C++20, containing a 
+
+A minimal toy programming language written in C++20, containing a
 compiler and a bytecode VM.
 
-*Version 0.1.0*
+**This repository is free of LLM-written code**
+
+## Features
+
+* Lexical Analysis (7/7 tests passed)
+* Syntactic Analysis (4/4 tests passed)
+
+## Subdirectories
+
+`gneic/` -- Gneiss Compiler  
+`gneic/src/` -- GNC source files  
+`gneic/include/` -- GNC header files  
+`gneic/tests/` -- GNC test files/script
 
 ## How to use
+
 To build, Gneiss requires C++20, CMake, and Ninja.
 
 ### Cloning:
+
 ```bash
 git clone https://github.com/GoobusTheNoobus/Gneiss.git
 ```
 
-### Building:
-Debug:
+### Configuring:
+
 ```bash
-cmake --workflow --preset debug
-```
-Release:
-```bash
-cmake --workflow --preset release
+# Debug
+cmake -G Ninja -B <folder> 
+
+# Release
+cmake -G Ninja -B <folder> 
 ```
 
-### Features
-* Lexical Analysis
+Replace `<folder>` with whatever folder name you want.
+
+### Building:
+
+```bash
+cmake --build <folder>
+```

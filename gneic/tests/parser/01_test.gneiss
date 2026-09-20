@@ -1,0 +1,7 @@
+# Test literals
+42;
+3.14;
+'a';
+true;
+false;
+"hello";

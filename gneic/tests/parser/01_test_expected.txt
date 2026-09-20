@@ -1,0 +1,6 @@
+LiteralInt(42)
+LiteralFloat(3.14)
+LiteralChar('a')
+LiteralBool(1)
+LiteralBool(0)
+LiteralString('hello')

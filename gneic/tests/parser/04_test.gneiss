@@ -1,0 +1,13 @@
+function main() -> void {
+    var x = 42 * 4 - -4 * 3/3/3 / (32 - 3);
+
+    println("Hello, Gneiss!");
+
+    if x >= 10 {
+        print('Y');
+    } else {
+        print('N');
+    }
+
+    return;
+}

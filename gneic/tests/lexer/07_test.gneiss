@@ -1,0 +1,16 @@
+# Finally real program!
+
+function main() -> void {
+    var x = 42;
+    var y = 3.14;
+
+    println("Hello, Gneiss!");
+
+    if x >= 10 {
+        print('Y');
+    } else {
+        print('N');
+    }
+
+    return;
+}

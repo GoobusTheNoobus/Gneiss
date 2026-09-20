@@ -6,7 +6,10 @@
  *
  * Gneiss is a toy programming language developed in C++20
  *
- * Gneiss is licensed under the MIT license
+ * File: Token.hpp
+ * Description: Declaration for token kinds and structure
+ *
+ * Gneiss is licenced under the MIT license
  * Copyright (c) 2026  GoobusTheNoobus
  */
 
@@ -18,7 +21,6 @@ namespace gneiss::frontend {
 
 enum class TokenKind {
     EndOfFile,
-    Error,
 
     Identifier,
     LiteralString,
@@ -26,30 +28,30 @@ enum class TokenKind {
     LiteralFloat,
     LiteralChar,
 
-    KeywordVar,
-    KeywordFunction,
-    KeywordVoid,
-    KeywordPrint,
-    KeywordPrintln,
-    KeywordExit,
-    KeywordReturn,
-    KeywordTrue,
-    KeywordFalse,
-    KeywordIf,
-    KeywordElse,
+    KwVar,
+    KwFunction,
+    KwVoid,
+    KwPrint,
+    KwPrintln,
+    KwExit,
+    KwReturn,
+    KwTrue,
+    KwFalse,
+    KwIf,
+    KwElse,
 
-    OperatorPlus,
-    OperatorMinus,
-    OperatorStar,
-    OperatorSlash,
-    OperatorPercent,
+    Plus,
+    Minus,
+    Star,
+    Slash,
+    Percent,
 
-    OperatorCompLess,
-    OperatorCompGreater,
-    OperatorCompLessEqual,
-    OperatorCompGreaterEqual,
-    OperatorCompEqual,
-    OperatorCompNotEqual,
+    LessThan,
+    GreaterThan,
+    LessEqualTo,
+    GreaterEqualTo,
+    EqualEqual,
+    BangEqual,
 
     Equal,
     Arrow,
@@ -67,13 +69,15 @@ enum class TokenKind {
 };
 
 struct Token {
-    TokenKind kind = TokenKind::Error;
+    TokenKind kind;
     std::string data;
     size_t line_number = 0;
 };
 
+// human-readable representation helpers
 std::string token_kind_to_string(TokenKind kind);
 std::ostream& operator<<(std::ostream& os, const Token& token);
 std::ostream& operator<<(std::ostream& os, const std::vector<Token>& tokens);
+std::string token_kind_repr(TokenKind kind); // for error reporting
 
 } // namespace gneiss::frontend

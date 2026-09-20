@@ -1,0 +1,4 @@
+foo;
+hello;
+foo123;
+# We already know identifiers are lexed correctly, so we don't need as many test cases

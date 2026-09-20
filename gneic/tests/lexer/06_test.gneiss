@@ -1,0 +1,11 @@
+# Test operators & punctuation
+
++ - * / %
+< >
+<= >=
+== !=
+=
+->
+
+( ) [ ] { }
+; : . ,

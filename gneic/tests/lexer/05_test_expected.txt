@@ -1,0 +1,8 @@
+LiteralString('hello')
+LiteralString('hello world')
+LiteralString('')
+LiteralString('hello, Gneiss!
+')
+LiteralString('123')
+LiteralString('foo_bar')
+EndOfFile('')
