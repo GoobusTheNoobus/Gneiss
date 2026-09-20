@@ -44,3 +44,5 @@ Replace `<folder>` with whatever folder name you want.
 ```bash
 cmake --build <folder>
 ```
+
+This should build the executable `build/gneic/gneic`.
