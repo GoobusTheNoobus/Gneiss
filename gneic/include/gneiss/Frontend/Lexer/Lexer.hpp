@@ -51,6 +51,7 @@ private:
     // lexer helper functions
     [[nodiscard]] bool end() const { return position >= source.size(); }
     [[nodiscard]] char peek() const { return end() ? '\0' : source[position]; }
+    [[nodiscard]] char peek(int i) const { return position >= source.size() - i ? '\0' : source[position + i]; }
     char next() {
         if (end())
             return '\0';

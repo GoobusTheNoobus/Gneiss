@@ -1,0 +1,10 @@
+# Testing comment
+# Single line
+/* Multi line but single line */
+
+/*
+
+Multi line but actually
+multi line
+
+*/

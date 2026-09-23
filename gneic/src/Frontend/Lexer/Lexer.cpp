@@ -1,9 +1,9 @@
 /* =============================================================
-*          ____   _   _   _____   ___   ____    ____  
-*         / ___| | \ | | | ____| |_ _| / ___|  / ___| 
-*        | |  _  |  \| | |  _|    | |  \___ \  \___ \ 
-*        | |_| | | |\  | | |___   | |   ___) |  ___) |
-*         \____| |_| \_| |_____| |___| |____/  |____/ 
+ *          ____   _   _   _____   ___   ____    ____
+ *         / ___| | \ | | | ____| |_ _| / ___|  / ___|
+ *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
+ *        | |_| | | |\  | | |___   | |   ___) |  ___) |
+ *         \____| |_| \_| |_____| |___| |____/  |____/
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
@@ -35,15 +35,17 @@ std::vector<Token> Lexer::tokenize(std::string source) {
         // We start with comments, since they have highest priority
         if (match('#'))
             skip_comment();
-        //Multiline comments
-        if (match('/')){
-            if (match('*')){
-                skip_multiline_comment();
-            }
+
+        // Multiline comments
+        if (check('/') && peek(1) == '*') {
+            next();
+            next();
+            skip_multiline_comment();
+            continue;
         }
 
         // Whitespace has no semantic meaning in Gneiss, so it is discarded.
-        else if (std::isspace(static_cast<unsigned char>(current)))
+        if (std::isspace(static_cast<unsigned char>(current)))
             next();
 
         // Numeric literals must begin with a digit; a leading '.' is always
@@ -78,14 +80,17 @@ void Lexer::skip_comment() {
 }
 
 void Lexer::skip_multiline_comment() {
-    while (!end()){
-        if (check('*')){
-            if (check('/')){
-                return;
-            }
+    while (!end()) {
+        if (check('*') && peek(1) == '/') {
+            next();
+            next();
+            return;
         }
+
         next();
     }
+
+    diagnostics::report_error("Unterminated multiline comment", line_number);
 }
 
 void Lexer::tokenize_number(std::vector<Token>& tokens) {
