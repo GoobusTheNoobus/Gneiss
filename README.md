@@ -37,7 +37,8 @@ cmake -G Ninja -B <folder>
 cmake -G Ninja -B <folder> 
 ```
 
-Replace `<folder>` with whatever folder name you want.
+Replace `<folder>` with whatever folder name you want. A good folder name
+should start with `build`. For example, `build-release` or `build-debug`.
 
 ### Building:
 

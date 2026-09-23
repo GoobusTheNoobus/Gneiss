@@ -1,17 +1,14 @@
 /* =============================================================
-*          ____   _   _   _____   ___   ____    ____  
-*         / ___| | \ | | | ____| |_ _| / ___|  / ___| 
-*        | |  _  |  \| | |  _|    | |  \___ \  \___ \ 
-*        | |_| | | |\  | | |___   | |   ___) |  ___) |
-*         \____| |_| \_| |_____| |___| |____/  |____/ 
+ *          ____   _   _   _____   ___   ____    ____
+ *         / ___| | \ | | | ____| |_ _| / ___|  / ___|
+ *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
+ *        | |_| | | |\  | | |___   | |   ___) |  ___) |
+ *         \____| |_| \_| |_____| |___| |____/  |____/
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
  *
- * File: PrettyPrint.cpp
- * Description: Implementation for pretty printing functions for printing AST nodes
- *
- * Gneiss is licensed under the MIT license
+ * Gneiss is licenced under the MIT license
  * Copyright (c) 2026  GoobusTheNoobus
  */
 

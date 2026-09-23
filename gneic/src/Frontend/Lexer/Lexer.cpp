@@ -8,9 +8,6 @@
  *
  * Gneiss is a toy programming language developed in C++20
  *
- * File: Lexer.cpp
- * Description: Implementation of Lexer, used for lexical analysis
- *
  * Gneiss is licenced under the MIT license
  * Copyright (c) 2026  GoobusTheNoobus
  */
