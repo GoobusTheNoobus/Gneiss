@@ -35,6 +35,12 @@ std::vector<Token> Lexer::tokenize(std::string source) {
         // We start with comments, since they have highest priority
         if (match('#'))
             skip_comment();
+        //Multiline comments
+        if (match('/')){
+            if (match('*')){
+                skip_multiline_comment();
+            }
+        }
 
         // Whitespace has no semantic meaning in Gneiss, so it is discarded.
         else if (std::isspace(static_cast<unsigned char>(current)))
@@ -67,6 +73,17 @@ std::vector<Token> Lexer::tokenize(std::string source) {
 // Only single line comments are supported
 void Lexer::skip_comment() {
     while (!end() && !check('\n')) {
+        next();
+    }
+}
+
+void Lexer::skip_multiline_comment() {
+    while (!end()){
+        if (check('*')){
+            if (check('/')){
+                return;
+            }
+        }
         next();
     }
 }

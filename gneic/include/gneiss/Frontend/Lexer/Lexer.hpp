@@ -30,6 +30,9 @@ private:
     // call when encountering a hashtag
     void skip_comment();
 
+    // call when encountering the sequence "/*", ends when encoountering "*/"
+    void skip_multiline_comment();
+
     // call when encountering a digit
     void tokenize_number(std::vector<Token>& tokens);
 
