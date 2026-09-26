@@ -4,15 +4,15 @@
  *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
  *        | |_| | | |\  | | |___   | |   ___) |  ___) |
  *         \____| |_| \_| |_____| |___| |____/  |____/
+ *
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
  *
  * Gneiss is licenced under the MIT license
- * Copyright (c) 2026  GoobusTheNoobus
  */
 
-#include <gneiss/Frontend/Parser/PrettyPrint.hpp>
+#include "gneiss/ast_pretty.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -29,7 +29,6 @@ int indent        = 0;
 void dispatch(const std::unique_ptr<ASTNode>& node) {
     if (!node) {
         *out << std::string(indent, ' ') << "null\n";
-        // std::cout << static_cast<int>(node->kind) << std::endl;
         return;
     }
 

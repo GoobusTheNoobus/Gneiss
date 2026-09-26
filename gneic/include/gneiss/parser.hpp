@@ -4,19 +4,18 @@
  *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
  *        | |_| | | |\  | | |___   | |   ___) |  ___) |
  *         \____| |_| \_| |_____| |___| |____/  |____/
+ *
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
  *
  * Gneiss is licenced under the MIT license
- * Copyright (c) 2026  GoobusTheNoobus
  */
 
 #pragma once
-#include <gneiss/Core/Diagnostic.hpp>
-#include <gneiss/Frontend/AST/AST.hpp>
-#include <gneiss/Frontend/AST/ASTStatement.hpp>
-#include <gneiss/Frontend/Lexer/Token.hpp>
+#include "gneiss/ast.hpp"
+#include "gneiss/diagnostic.hpp"
+#include "gneiss/token.hpp"
 #include <vector>
 
 namespace gneiss::frontend {

@@ -4,16 +4,16 @@
  *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
  *        | |_| | | |\  | | |___   | |   ___) |  ___) |
  *         \____| |_| \_| |_____| |___| |____/  |____/
+ *
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
  *
  * Gneiss is licenced under the MIT license
- * Copyright (c) 2026  GoobusTheNoobus
  */
 
-#include <gneiss/Core/Core.hpp>
-#include <gneiss/Core/Diagnostic.hpp>
+#include "gneiss/diagnostic.hpp"
+#include "gneiss/core.hpp"
 #include <iostream>
 
 namespace gneiss::diagnostics {
@@ -23,12 +23,12 @@ int errors() { return error_count; }
 
 // Errors don't immediately terminate. Instead, most of the time, errors can be
 // recovered
-void report_error(const std::string& message, size_t line_number) {
+void report_error(const std::string& message, usize line_number) {
     ++error_count;
     std::cerr << ansi::RED << "Error on line " << line_number << ": " << message << '\n' << ansi::RESET;
 }
 
-void report_warning(const std::string& message, size_t line_number) {
+void report_warning(const std::string& message, usize line_number) {
     std::cerr << ansi::YELLOW << "Warning on line " << line_number << ": " << message << '\n' << ansi::RESET;
 }
 

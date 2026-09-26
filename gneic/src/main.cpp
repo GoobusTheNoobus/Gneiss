@@ -4,19 +4,19 @@
  *        | |  _  |  \| | |  _|    | |  \___ \  \___ \
  *        | |_| | | |\  | | |___   | |   ___) |  ___) |
  *         \____| |_| \_| |_____| |___| |____/  |____/
+ *
  * =============================================================
  *
  * Gneiss is a toy programming language developed in C++20
  *
  * Gneiss is licenced under the MIT license
- * Copyright (c) 2026  GoobusTheNoobus
  */
 
-#include <gneiss/Core/Core.hpp>
-#include <gneiss/Core/File.hpp>
-#include <gneiss/Frontend/Lexer/Lexer.hpp>
-#include <gneiss/Frontend/Parser/Parser.hpp>
-#include <gneiss/Frontend/Parser/PrettyPrint.hpp>
+#include "gneiss/ast_pretty.hpp"
+#include "gneiss/core.hpp"
+#include "gneiss/file.hpp"
+#include "gneiss/lexer.hpp"
+#include "gneiss/parser.hpp"
 
 #include <iostream>
 
