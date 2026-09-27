@@ -30,8 +30,12 @@ std::vector<Token> Lexer::tokenize(std::string source) {
         char current = peek();
 
         // We start with comments, since they have highest priority
-        if (match('#'))
+        
+        // Singleline comments
+        if (match('#')) {
             skip_comment();
+            continue;
+        }
 
         // Multiline comments
         if (check('/') && peek(1) == '*') {
