@@ -68,3 +68,7 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Ignore the IDE config files
+**/.idea/workspace.xml 
+**/.idea/tasks.xml
