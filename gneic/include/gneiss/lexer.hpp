@@ -19,13 +19,30 @@
 namespace gneiss {
 class DiagnosticEngine;
 }
+
 namespace gneiss::parse {
 
+/**
+ * @brief converts Gneiss source code into tokens
+ *
+ * The lexer recognizes literals, identifiers, keywords, operators,
+ * comments, and other syntactic elements used by the parser.
+ */
 class Lexer {
 public:
+    /**
+     * @brief creates a lexer using the given diagnostic engine
+     *
+     * @param diagnostic diagnostic engine used to report lexical errors
+     */
     explicit Lexer(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
 
-    // main tokenize function
+    /**
+     * @brief tokenizes a Gneiss source file
+     *
+     * @param source the source code to tokenize
+     * @return the tokens produced from the source code
+     */
     std::vector<Token> tokenize(std::string source);
 
 private:

@@ -407,7 +407,6 @@ std::vector<StatementParameterDeclaration> Parser::parse_function_params() {
         }
 
         StatementParameterDeclaration param{name, type};
-        param.id = id++;
 
         def_params.push_back(param);
 

@@ -26,7 +26,7 @@ public:
 
     void print(std::ostream& out);
 
-    int count_errors() const;
+    [[nodiscard]] int count_errors() const;
 
 private:
     enum class DiagnosticSeverity { Error, Warning };

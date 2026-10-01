@@ -20,11 +20,27 @@
 
 namespace gneiss::parse {
 
+/**
+ * @brief parses a sequence of tokens into an abstract syntax tree
+ *
+ * the parser validates the syntactic structure of the token list and
+ * constructs the AST consumed by later compiler stages
+ */
 class Parser {
 public:
+    /**
+     * @brief creates a parser using the given diagnostic engine
+     *
+     * @param diagnostic diagnostic engine used to report syntax errors
+     */
     explicit Parser(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
 
-    // Main parse function
+    /**
+     * @brief constructs AST from a list of token
+     *
+     * @param tokens the list of tokens given
+     * @return the root of the ast node, a Program node
+     */
     Program parse(const std::vector<Token>& tokens);
 
 private:
@@ -72,7 +88,6 @@ private:
     template <typename Type, typename... ArgTypes>
     std::unique_ptr<Type> make_node(size_t line_number, ArgTypes&&... args) {
         auto node         = std::make_unique<Type>(std::forward<ArgTypes>(args)...);
-        node->id          = id++;
         node->line_number = line_number;
         return node;
     }

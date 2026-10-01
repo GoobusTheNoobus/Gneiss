@@ -18,6 +18,11 @@
 
 namespace gneiss {
 
-// returns std::nullopt if there is an error reading the file
+/**
+ * @brief Reads the contents of a file.
+ *
+ * @param path Path to the file to read.
+ * @return The file contents, or std::nullopt if the file could not be read.
+ */
 std::optional<std::string> read_file(const std::string& path);
 } // namespace gneiss

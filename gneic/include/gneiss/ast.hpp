@@ -13,6 +13,7 @@
  */
 
 #pragma once
+#include "core.hpp"
 #include "gneiss/token.hpp"
 
 #include <memory>
@@ -49,77 +50,82 @@ enum class ASTNodeKind {
 
 };
 
-using ASTNodeID = size_t;
+using ASTNodeID = usize;
+
+/**
+ * @brief Base class for all nodes in the Gneiss abstract syntax tree.
+ *
+ * Each node stores its kind and source line number.
+ */
 
 struct ASTNode {
-    explicit ASTNode(ASTNodeKind kind) : kind(kind), id{} {}
+    explicit ASTNode(ASTNodeKind kind) : kind(kind) {}
     ASTNodeKind kind;
-    ASTNodeID id;
-    size_t line_number{};
+    usize line_number{};
 };
 
-struct Block : public ASTNode {
+struct Block : ASTNode {
     Block() : ASTNode(ASTNodeKind::Block) {}
     std::vector<std::unique_ptr<ASTNode>> children;
 };
 
-struct Program : public ASTNode {
+struct Program : ASTNode {
     Program() : ASTNode(ASTNodeKind::Program) {}
     Block block;
 };
 
-struct Identifier : public ASTNode {
-    Identifier(std::string name) : ASTNode(ASTNodeKind::Identifier), name(std::move(name)) {}
+struct Identifier : ASTNode {
+    explicit Identifier(std::string name) : ASTNode(ASTNodeKind::Identifier), name(std::move(name)) {}
     std::string name;
 };
 
-struct LiteralInt : public ASTNode {
-    LiteralInt(uint64_t value) : ASTNode(ASTNodeKind::LiteralInt), value(value) {}
+struct LiteralInt : ASTNode {
+    explicit LiteralInt(uint64_t value) : ASTNode(ASTNodeKind::LiteralInt), value(value) {}
     uint64_t value;
 };
 
-struct LiteralFloat : public ASTNode {
-    LiteralFloat(double value) : ASTNode(ASTNodeKind::LiteralFloat), value(value) {}
+struct LiteralFloat : ASTNode {
+    explicit LiteralFloat(double value) : ASTNode(ASTNodeKind::LiteralFloat), value(value) {}
     double value;
 };
 
-struct LiteralChar : public ASTNode {
-    LiteralChar(char value) : ASTNode(ASTNodeKind::LiteralChar), value(value) {}
+struct LiteralChar : ASTNode {
+    explicit LiteralChar(char value) : ASTNode(ASTNodeKind::LiteralChar), value(value) {}
     char value;
 };
 
-struct LiteralBool : public ASTNode {
-    LiteralBool(bool value) : ASTNode(ASTNodeKind::LiteralBool), value(value) {}
+struct LiteralBool : ASTNode {
+    explicit LiteralBool(bool value) : ASTNode(ASTNodeKind::LiteralBool), value(value) {}
     bool value;
 };
 
-struct LiteralString : public ASTNode {
-    LiteralString(std::string value) : ASTNode(ASTNodeKind::LiteralString), value(std::move(value)) {}
+struct LiteralString : ASTNode {
+    explicit LiteralString(std::string value) : ASTNode(ASTNodeKind::LiteralString), value(std::move(value)) {}
     std::string value;
 };
 
-struct BinaryExpression : public ASTNode {
+struct BinaryExpression : ASTNode {
     BinaryExpression(std::unique_ptr<ASTNode> left, std::unique_ptr<ASTNode> right, TokenKind op)
         : ASTNode(ASTNodeKind::BinaryExpression), left(std::move(left)), right(std::move(right)), op(op) {}
     std::unique_ptr<ASTNode> left, right;
     TokenKind op;
 };
 
-struct UnaryExpression : public ASTNode {
+struct UnaryExpression : ASTNode {
     UnaryExpression(std::unique_ptr<ASTNode> operand, TokenKind op)
         : ASTNode(ASTNodeKind::UnaryExpression), operand(std::move(operand)), op(op) {}
     std::unique_ptr<ASTNode> operand;
     TokenKind op;
 };
 
-struct FunctionCallExpression : public ASTNode {
+struct FunctionCallExpression : ASTNode {
     FunctionCallExpression(std::unique_ptr<ASTNode> name, std::vector<std::unique_ptr<ASTNode>> params)
         : ASTNode(ASTNodeKind::FunctionCallExpression), name(std::move(name)), params(std::move(params)) {}
     std::unique_ptr<ASTNode> name;
     std::vector<std::unique_ptr<ASTNode>> params;
 };
 
-struct StatementParameterDeclaration : public ASTNode {
+struct StatementParameterDeclaration : ASTNode {
     StatementParameterDeclaration(std::string name, std::string type)
         : ASTNode(ASTNodeKind::StatementVariableDeclaration), name(std::move(name)), type(std::move(type)) {}
 
@@ -127,7 +133,7 @@ struct StatementParameterDeclaration : public ASTNode {
     std::string type;
 };
 
-struct StatementVariableDeclaration : public ASTNode {
+struct StatementVariableDeclaration : ASTNode {
     StatementVariableDeclaration(std::string name, std::string type, std::unique_ptr<ASTNode> value)
         : ASTNode(ASTNodeKind::StatementVariableDeclaration), name(std::move(name)), type(std::move(type)),
           value(std::move(value)) {}
@@ -137,7 +143,7 @@ struct StatementVariableDeclaration : public ASTNode {
     std::unique_ptr<ASTNode> value;
 };
 
-struct StatementVariableAssignment : public ASTNode {
+struct StatementVariableAssignment : ASTNode {
     StatementVariableAssignment(std::string name, std::unique_ptr<ASTNode> value)
         : ASTNode(ASTNodeKind::StatementVariableAssignment), name(std::move(name)), value(std::move(value)) {}
 
@@ -145,7 +151,7 @@ struct StatementVariableAssignment : public ASTNode {
     std::unique_ptr<ASTNode> value;
 };
 
-struct StatementFunctionDefinition : public ASTNode {
+struct StatementFunctionDefinition : ASTNode {
     StatementFunctionDefinition(std::string name, std::string type, std::vector<StatementParameterDeclaration> params,
                                 std::unique_ptr<Block> body)
         : ASTNode(ASTNodeKind::StatementFunctionDefinition), name(std::move(name)), type(std::move(type)),
@@ -156,31 +162,31 @@ struct StatementFunctionDefinition : public ASTNode {
     std::unique_ptr<Block> body;
 };
 
-struct StatementPrint : public ASTNode {
+struct StatementPrint : ASTNode {
     explicit StatementPrint(std::vector<std::unique_ptr<ASTNode>> operands)
         : ASTNode(ASTNodeKind::StatementPrint), operands(std::move(operands)) {}
     std::vector<std::unique_ptr<ASTNode>> operands;
 };
 
-struct StatementPrintln : public ASTNode {
+struct StatementPrintln : ASTNode {
     explicit StatementPrintln(std::vector<std::unique_ptr<ASTNode>> operands)
         : ASTNode(ASTNodeKind::StatementPrintln), operands(std::move(operands)) {}
     std::vector<std::unique_ptr<ASTNode>> operands;
 };
 
-struct StatementExit : public ASTNode {
+struct StatementExit : ASTNode {
     explicit StatementExit(std::unique_ptr<ASTNode> value)
         : ASTNode(ASTNodeKind::StatementExit), value(std::move(value)) {}
     std::unique_ptr<ASTNode> value;
 };
 
-struct StatementReturn : public ASTNode {
+struct StatementReturn : ASTNode {
     explicit StatementReturn(std::unique_ptr<ASTNode> value)
         : ASTNode(ASTNodeKind::StatementReturn), value(std::move(value)) {}
     std::unique_ptr<ASTNode> value;
 };
 
-struct StatementIf : public ASTNode {
+struct StatementIf : ASTNode {
     StatementIf(std::unique_ptr<ASTNode> condition, std::unique_ptr<Block> branch_if_true,
                 std::unique_ptr<Block> branch_if_false)
         : ASTNode(ASTNodeKind::StatementIf), condition(std::move(condition)), branch_if_true(std::move(branch_if_true)),
