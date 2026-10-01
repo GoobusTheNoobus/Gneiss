@@ -65,10 +65,14 @@ int main(int argc, char* argv[]) {
         if (!source)
             return 1;
 
-        gneiss::frontend::Lexer lexer;
+        gneiss::DiagnosticEngine engine;
+
+        gneiss::parse::Lexer lexer(&engine);
         std::cout << lexer.tokenize(*source) << std::flush;
 
-        return gneiss::diagnostics::errors() >= 1;
+        engine.print(std::cerr);
+
+        return engine.count_errors() >= 1;
     }
 
     // syntactic analysis
@@ -85,15 +89,19 @@ int main(int argc, char* argv[]) {
         if (!source)
             return 1;
 
-        gneiss::frontend::Lexer lexer;
+        gneiss::DiagnosticEngine engine;
+
+        gneiss::parse::Lexer lexer(&engine);
         auto tokens = lexer.tokenize(*source);
 
-        gneiss::frontend::Parser parser;
+        gneiss::parse::Parser parser(&engine);
         auto ast = parser.parse(tokens);
 
-        gneiss::frontend::pretty::print_ast(ast);
+        gneiss::parse::pretty::print_ast(ast);
 
-        return 0;
+        engine.print(std::cerr);
+
+        return engine.count_errors() >= 1;
     }
 
     std::string path = std::move(arg1);

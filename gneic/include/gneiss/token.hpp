@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 enum class TokenKind {
     EndOfFile,
@@ -79,4 +79,4 @@ std::ostream& operator<<(std::ostream& os, const Token& token);
 std::ostream& operator<<(std::ostream& os, const std::vector<Token>& tokens);
 std::string token_kind_repr(TokenKind kind); // for error reporting
 
-} // namespace gneiss::frontend
+} // namespace gneiss::parse

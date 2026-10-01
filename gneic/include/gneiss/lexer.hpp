@@ -16,10 +16,15 @@
 #include "gneiss/token.hpp"
 #include <vector>
 
-namespace gneiss::frontend {
+namespace gneiss {
+class DiagnosticEngine;
+}
+namespace gneiss::parse {
 
 class Lexer {
 public:
+    explicit Lexer(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
+
     // main tokenize function
     std::vector<Token> tokenize(std::string source);
 
@@ -46,34 +51,21 @@ private:
     void tokenize_symbol(std::vector<Token>& tokens);
 
     // lexer helper functions
-    [[nodiscard]] bool end() const { return position >= source.size(); }
-    [[nodiscard]] char peek() const { return end() ? '\0' : source[position]; }
-    [[nodiscard]] char peek(int i) const { return position >= source.size() - i ? '\0' : source[position + i]; }
-    char next() {
-        if (end())
-            return '\0';
+    [[nodiscard]] bool end() const;
+    [[nodiscard]] char peek() const;
+    [[nodiscard]] char peek(int i) const;
+    [[nodiscard]] bool check(char expected) const;
 
-        char c = source[position++];
+    char next();
+    bool match(char expected);
 
-        if (c == '\n')
-            ++line_number;
-
-        return c;
-    }
-    [[nodiscard]] bool check(char expected) const { return peek() == expected; }
-    bool match(char expected) {
-        if (!check(expected))
-            return false;
-        next();
-        return true;
-    }
-
-    // helper
-    static char generate_escape(char c, size_t line_number);
+    char generate_escape(char c, size_t line_number);
 
     std::string source;
     size_t position{0}; // brace initialize because cool
     size_t line_number{1};
+
+    DiagnosticEngine* diagnostic;
 };
 
-} // namespace gneiss::frontend
+} // namespace gneiss::parse

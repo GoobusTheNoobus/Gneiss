@@ -14,22 +14,44 @@
 
 #include "gneiss/diagnostic.hpp"
 #include "gneiss/core.hpp"
+
+#include <algorithm>
 #include <iostream>
+#include <utility>
 
-namespace gneiss::diagnostics {
+namespace gneiss {
 
-static int error_count = 0;
-int errors() { return error_count; }
+int DiagnosticEngine::count_errors() const {
+    int errors = 0;
 
-// Errors don't immediately terminate. Instead, most of the time, errors can be
-// recovered
-void report_error(const std::string& message, usize line_number) {
-    ++error_count;
-    std::cerr << ansi::RED << "Error on line " << line_number << ": " << message << '\n' << ansi::RESET;
+    for (const Diagnostic& d : diagnostics) {
+        errors += d.severity == DiagnosticSeverity::Error ? 1 : 0;
+    }
+
+    return errors;
 }
 
-void report_warning(const std::string& message, usize line_number) {
-    std::cerr << ansi::YELLOW << "Warning on line " << line_number << ": " << message << '\n' << ansi::RESET;
+void DiagnosticEngine::raise_error(std::string message, usize line_number) {
+    diagnostics.push_back(
+        {.message = std::move(message), .line_number = line_number, .severity = DiagnosticSeverity::Error});
 }
 
-} // namespace gneiss::diagnostics
+void DiagnosticEngine::raise_warning(std::string message, usize line_number) {
+    diagnostics.push_back(
+        {.message = std::move(message), .line_number = line_number, .severity = DiagnosticSeverity::Warning});
+}
+
+void DiagnosticEngine::print(std::ostream& out) {
+    std::sort(diagnostics.data(), diagnostics.data() + diagnostics.size(),
+              [](const Diagnostic& d1, const Diagnostic& d2) -> bool { return d1.line_number > d2.line_number; });
+
+    for (const Diagnostic& d : diagnostics) {
+        if (d.severity == DiagnosticSeverity::Warning) {
+            out << ansi::YELLOW << "On line " << d.line_number << " Warning: " << d.message << ansi::RESET << '\n';
+        } else {
+            out << ansi::RED << "On line " << d.line_number << " Error: " << d.message << ansi::RESET << '\n';
+        }
+    }
+}
+
+} // namespace gneiss

@@ -20,7 +20,7 @@
 
 #include <charconv>
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 Program Parser::parse(const std::vector<Token>& tokens) {
     Program program;
@@ -83,7 +83,7 @@ std::unique_ptr<ASTNode> Parser::parse_statement() {
         if (match(TokenKind::Arrow)) {
             // identifiers are just types, while void is a special keyword
             if (peek().kind != TokenKind::Identifier && peek().kind != TokenKind::KwVoid) {
-                diagnostics::report_error("Invalid type name '" + peek().data + "'", peek().line_number);
+                diagnostic->raise_error("Invalid type name '" + peek().data + "'", peek().line_number);
 
             } else {
                 type = peek().data;
@@ -151,7 +151,7 @@ std::unique_ptr<ASTNode> Parser::parse_statement() {
         if (check(TokenKind::Identifier)) {
             name = next().data;
         } else {
-            diagnostics::report_error("Expected identifier", peek().line_number);
+            diagnostic->raise_error("Expected identifier", peek().line_number);
         }
 
         std::string type;
@@ -161,9 +161,9 @@ std::unique_ptr<ASTNode> Parser::parse_statement() {
             if (check(TokenKind::Identifier)) {
                 type = next().data;
             } else if (check(TokenKind::KwVoid)) {
-                diagnostics::report_error("Variable cannot be type void", next().line_number);
+                diagnostic->raise_error("Variable cannot be type void", next().line_number);
             } else {
-                diagnostics::report_error("Expected type name", peek().line_number);
+                diagnostic->raise_error("Expected type name", peek().line_number);
             }
         }
 
@@ -175,7 +175,7 @@ std::unique_ptr<ASTNode> Parser::parse_statement() {
         expect(TokenKind::Semicolon);
 
         if (!value && type.empty()) {
-            diagnostics::report_error("Cannot deduce type", line_number);
+            diagnostic->raise_error("Cannot deduce type", line_number);
         }
 
         return make_node<StatementVariableDeclaration>(line_number, name, type, std::move(value));
@@ -324,7 +324,7 @@ std::unique_ptr<ASTNode> Parser::parse_primary() {
         auto [ptr, ec] = std::from_chars(token.data.data(), token.data.data() + token.data.size(), data);
 
         if (ec != std::errc{}) {
-            diagnostics::report_error("Invalid float literal " + token.data, line_number);
+            diagnostic->raise_error("Invalid float literal " + token.data, line_number);
         }
         next();
         return make_node<LiteralFloat>(line_number, data);
@@ -335,7 +335,7 @@ std::unique_ptr<ASTNode> Parser::parse_primary() {
         auto [ptr, ec] = std::from_chars(token.data.data(), token.data.data() + token.data.size(), data);
 
         if (ec != std::errc{}) {
-            diagnostics::report_error("Invalid int literal " + token.data, line_number);
+            diagnostic->raise_error("Invalid int literal " + token.data, line_number);
         }
         next();
         return make_node<LiteralInt>(line_number, data);
@@ -356,9 +356,9 @@ std::unique_ptr<ASTNode> Parser::parse_primary() {
     }
     default:
         Token tok = next();
-        diagnostics::report_error("Expected expression, got '" +
-                                      (tok.kind == TokenKind::EndOfFile ? "EOF" : "'" + tok.data + "'") + "'",
-                                  line_number);
+        diagnostic->raise_error("Expected expression, got '" +
+                                    (tok.kind == TokenKind::EndOfFile ? "EOF" : "'" + tok.data + "'") + "'",
+                                line_number);
         return nullptr;
     }
 }
@@ -399,11 +399,11 @@ std::vector<StatementParameterDeclaration> Parser::parse_function_params() {
         }
 
         else if (check(TokenKind::KwVoid)) {
-            diagnostics::report_error("Parameter cannot be type void", next().line_number);
+            diagnostic->raise_error("Parameter cannot be type void", next().line_number);
         }
 
         else {
-            diagnostics::report_error("Expected type name", peek().line_number);
+            diagnostic->raise_error("Expected type name", peek().line_number);
         }
 
         StatementParameterDeclaration param{name, type};
@@ -420,4 +420,36 @@ std::vector<StatementParameterDeclaration> Parser::parse_function_params() {
     return def_params;
 }
 
-} // namespace gneiss::frontend
+bool Parser::end() const { return position >= source.size(); }
+const Token& Parser::peek() const { return end() ? source.back() : source[position]; }
+const Token& Parser::peek_next() const { return position >= source.size() - 1 ? source.back() : source[position + 1]; }
+const Token& Parser::next() {
+    if (end())
+        return source.back();
+
+    return source[position++];
+}
+
+bool Parser::check(TokenKind expected) const { return peek().kind == expected; }
+bool Parser::match(TokenKind expected) {
+    if (!check(expected))
+        return false;
+
+    next();
+    return true;
+}
+
+bool Parser::expect(TokenKind expected) {
+    if (!match(expected)) {
+        std::string expected_str = token_kind_repr(expected);
+
+        diagnostic->raise_error("Expected " + expected_str + ", got " +
+                                    (peek().kind == TokenKind::EndOfFile ? "EOF" : "'" + peek().data + "'"),
+                                peek().line_number);
+        return false;
+    }
+
+    return true;
+}
+
+} // namespace gneiss::parse

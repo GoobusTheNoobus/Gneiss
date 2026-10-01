@@ -15,7 +15,7 @@
 #include "gneiss/token.hpp"
 #include <sstream>
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 // Prints a single token in a compact debug representation;
 // weird formatting can occur if the token is a string/char containing escape
@@ -213,4 +213,4 @@ std::string token_kind_repr(TokenKind kind) {
     }
 }
 
-} // namespace gneiss::frontend
+} // namespace gneiss::parse

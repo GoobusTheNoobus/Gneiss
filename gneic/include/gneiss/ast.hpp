@@ -18,7 +18,7 @@
 #include <memory>
 #include <vector>
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 enum class ASTNodeKind {
 
@@ -191,4 +191,4 @@ struct StatementIf : public ASTNode {
     std::unique_ptr<Block> branch_if_false;
 };
 
-} // namespace gneiss::frontend
+} // namespace gneiss::parse

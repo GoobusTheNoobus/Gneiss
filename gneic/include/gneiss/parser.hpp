@@ -18,10 +18,12 @@
 #include "gneiss/token.hpp"
 #include <vector>
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 class Parser {
 public:
+    explicit Parser(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
+
     // Main parse function
     Program parse(const std::vector<Token>& tokens);
 
@@ -56,37 +58,15 @@ private:
     std::unique_ptr<Block> parse_block();
 
     // parser helper functions
-    [[nodiscard]] bool end() const { return position >= source.size(); }
-    [[nodiscard]] const Token& peek() const { return end() ? source.back() : source[position]; }
-    [[nodiscard]] const Token& peek_next() const {
-        return position >= source.size() - 1 ? source.back() : source[position + 1];
-    }
-    const Token& next() {
-        if (end())
-            return source.back();
+    [[nodiscard]] bool end() const;
+    [[nodiscard]] const Token& peek() const;
+    [[nodiscard]] const Token& peek_next() const;
 
-        return source[position++];
-    }
-    [[nodiscard]] bool check(TokenKind expected) const { return peek().kind == expected; }
-    [[nodiscard]] bool match(TokenKind expected) {
-        if (!check(expected))
-            return false;
+    const Token& next();
 
-        next();
-        return true;
-    }
-    bool expect(TokenKind expected) {
-        if (!match(expected)) {
-            std::string expected_str = token_kind_repr(expected);
-
-            diagnostics::report_error("Expected " + expected_str + ", got " +
-                                          (peek().kind == TokenKind::EndOfFile ? "EOF" : "'" + peek().data + "'"),
-                                      peek().line_number);
-            return false;
-        }
-
-        return true;
-    }
+    [[nodiscard]] bool check(TokenKind expected) const;
+    [[nodiscard]] bool match(TokenKind expected);
+    bool expect(TokenKind expected);
 
     // make_unique alias that also assigns node id
     template <typename Type, typename... ArgTypes>
@@ -100,6 +80,8 @@ private:
     std::vector<Token> source;
     size_t position{}; // brace initialize because cool
     ASTNodeID id{};
+
+    DiagnosticEngine* diagnostic;
 };
 
-} // namespace gneiss::frontend
+} // namespace gneiss::parse

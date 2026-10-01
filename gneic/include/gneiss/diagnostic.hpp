@@ -13,13 +13,31 @@
  */
 
 #pragma once
+#include "core.hpp"
 #include <string>
+#include <vector>
 
-namespace gneiss::diagnostics {
+namespace gneiss {
 
-// Basic error reporting
-void report_error(const std::string& message, size_t line_number);
-void report_warning(const std::string& message, size_t line_number);
-int errors();
+class DiagnosticEngine {
+public:
+    void raise_error(std::string message, usize line_number);
+    void raise_warning(std::string message, usize line_number);
 
-} // namespace gneiss::diagnostics
+    void print(std::ostream& out);
+
+    int count_errors() const;
+
+private:
+    enum class DiagnosticSeverity { Error, Warning };
+
+    struct Diagnostic {
+        std::string message;
+        usize line_number;
+        DiagnosticSeverity severity;
+    };
+
+    std::vector<Diagnostic> diagnostics;
+};
+
+} // namespace gneiss

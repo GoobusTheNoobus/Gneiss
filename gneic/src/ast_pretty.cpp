@@ -18,7 +18,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace gneiss::frontend::pretty {
+namespace gneiss::parse::pretty {
 
 namespace {
 
@@ -235,4 +235,4 @@ void print_function_def(const StatementFunctionDefinition& stm) {
     indent -= 2;
 }
 
-} // namespace gneiss::frontend::pretty
+} // namespace gneiss::parse::pretty

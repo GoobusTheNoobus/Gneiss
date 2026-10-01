@@ -15,7 +15,7 @@
 #pragma once
 #include "gneiss/ast.hpp"
 
-namespace gneiss::frontend::pretty {
+namespace gneiss::parse::pretty {
 
 void set_stream(std::ostream* os);
 
@@ -44,4 +44,4 @@ void print_var_declaration(const StatementVariableDeclaration& stm);
 void print_var_assignment(const StatementVariableAssignment& stm);
 void print_function_def(const StatementFunctionDefinition& stm);
 
-} // namespace gneiss::frontend::pretty
+} // namespace gneiss::parse::pretty

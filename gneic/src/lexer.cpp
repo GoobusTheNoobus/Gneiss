@@ -17,7 +17,7 @@
 #include "gneiss/diagnostic.hpp"
 #include "gneiss/file.hpp"
 
-namespace gneiss::frontend {
+namespace gneiss::parse {
 
 std::vector<Token> Lexer::tokenize(std::string source) {
 
@@ -30,8 +30,10 @@ std::vector<Token> Lexer::tokenize(std::string source) {
         char current = peek();
 
         // We start with comments, since they have highest priority
-        if (match('#'))
+        if (match('#')) {
             skip_comment();
+            continue;
+        }
 
         // Multiline comments
         if (check('/') && peek(1) == '*') {
@@ -87,7 +89,7 @@ void Lexer::skip_multiline_comment() {
         next();
     }
 
-    diagnostics::report_error("Unterminated multiline comment", line_number);
+    diagnostic->raise_error("Unterminated multiline comment", line_number);
 }
 
 void Lexer::tokenize_number(std::vector<Token>& tokens) {
@@ -101,7 +103,7 @@ void Lexer::tokenize_number(std::vector<Token>& tokens) {
         // dot. Multiple dot's result in an error.
         if (current == '.') {
             if (kind == TokenKind::LiteralFloat)
-                diagnostics::report_error("Too many dots in float literal", line_number);
+                diagnostic->raise_error("Too many dots in float literal", line_number);
             else
                 kind = TokenKind::LiteralFloat;
         }
@@ -247,7 +249,7 @@ void Lexer::tokenize_symbol(std::vector<Token>& tokens) {
 
         // This should fall through into default
     default:
-        diagnostics::report_error("Unknown symbol '" + std::string(1, c) + "'", line_number);
+        diagnostic->raise_error("Unknown symbol '" + std::string(1, c) + "'", line_number);
     }
 }
 
@@ -275,12 +277,12 @@ void Lexer::tokenize_string(std::vector<Token>& tokens) {
 
     // The string literal terminated right after the use of '\'
     if (escape) {
-        diagnostics::report_error("Incomplete escape sequence", line_number);
+        diagnostic->raise_error("Incomplete escape sequence", line_number);
     }
 
     // Either the line ended or the file did, if we don't receive a '"'.
     if (!match('"')) {
-        diagnostics::report_error("Unterminated string literal", line_number);
+        diagnostic->raise_error("Unterminated string literal", line_number);
     }
 
     tokens.push_back({TokenKind::LiteralString, value, line_number});
@@ -313,21 +315,21 @@ void Lexer::tokenize_char(std::vector<Token>& tokens) {
     // We just issue a warning if the user writes something like
     // var c = 'fuck the rules';
     if (value.size() > 1)
-        diagnostics::report_warning("Character literal cannot exceed a length of 1.", line_number);
+        diagnostic->raise_warning("Character literal cannot exceed a length of 1.", line_number);
 
     // However, we DO NOT accept empty character literal
     if (value.empty()) {
-        diagnostics::report_error("Character literal cannot be empty", line_number);
+        diagnostic->raise_error("Character literal cannot be empty", line_number);
     }
 
     // Same error handling logic as string literal
 
     if (escape) {
-        diagnostics::report_error("Incomplete escape sequence", line_number);
+        diagnostic->raise_error("Incomplete escape sequence", line_number);
     }
 
     if (!match('\'')) {
-        diagnostics::report_error("Unterminated character literal", line_number);
+        diagnostic->raise_error("Unterminated character literal", line_number);
     }
 
     tokens.push_back({TokenKind::LiteralChar, value, line_number});
@@ -354,14 +356,38 @@ char Lexer::generate_escape(char c, size_t line_number) {
     case 'b':
         return '\b';
     case '0':
-        diagnostics::report_warning("Null character is not supported", line_number);
+        diagnostic->raise_warning("Null character is not supported", line_number);
         return c;
     default:
-        diagnostics::report_warning("Unknown escape sequence \\" + std::string(1, c), line_number);
+        diagnostic->raise_warning("Unknown escape sequence \\" + std::string(1, c), line_number);
         // Invalid escape sequences evaluate to their original form. For
         // example, \q becomes q in the literal
         return c;
     }
 }
 
-} // namespace gneiss::frontend
+bool Lexer::end() const { return position >= source.size(); }
+char Lexer::peek() const { return end() ? '\0' : source[position]; }
+char Lexer::peek(int i) const { return position >= source.size() - i ? '\0' : source[position + i]; }
+bool Lexer::check(char expected) const { return peek() == expected; }
+
+char Lexer::next() {
+    if (end())
+        return '\0';
+
+    char c = source[position++];
+
+    if (c == '\n')
+        ++line_number;
+
+    return c;
+}
+
+bool Lexer::match(char expected) {
+    if (!check(expected))
+        return false;
+    next();
+    return true;
+}
+
+} // namespace gneiss::parse
