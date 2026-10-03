@@ -419,9 +419,18 @@ std::vector<StatementParameterDeclaration> Parser::parse_function_params() {
     return def_params;
 }
 
-bool Parser::end() const { return position >= source.size(); }
-const Token& Parser::peek() const { return end() ? source.back() : source[position]; }
-const Token& Parser::peek_next() const { return position >= source.size() - 1 ? source.back() : source[position + 1]; }
+bool Parser::end() const {
+    return position >= source.size();
+}
+
+const Token& Parser::peek() const {
+    return end() ? source.back() : source[position];
+}
+
+const Token& Parser::peek_next() const {
+    return position >= source.size() - 1 ? source.back() : source[position + 1];
+}
+
 const Token& Parser::next() {
     if (end())
         return source.back();
@@ -429,7 +438,10 @@ const Token& Parser::next() {
     return source[position++];
 }
 
-bool Parser::check(TokenKind expected) const { return peek().kind == expected; }
+bool Parser::check(TokenKind expected) const {
+    return peek().kind == expected;
+}
+
 bool Parser::match(TokenKind expected) {
     if (!check(expected))
         return false;

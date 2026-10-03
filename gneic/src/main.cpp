@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
         gneiss::parse::Parser parser(&engine);
         auto ast = parser.parse(tokens);
 
-        gneiss::parse::pretty::print_ast(ast);
+        gneiss::pretty::print_ast(ast);
 
         engine.print(std::cerr);
 

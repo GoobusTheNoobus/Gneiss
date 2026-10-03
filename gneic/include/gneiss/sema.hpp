@@ -13,22 +13,26 @@
  */
 
 #pragma once
-#include "gneiss/ast.hpp"
 
-namespace gneiss::pretty {
+#include "diagnostic.hpp"
+#include "symbol.hpp"
 
-/**
- * @brief Sets the output stream used by the pretty printer.
- *
- * @param os The stream to which AST output is written.
- */
-void set_stream(std::ostream* os);
+namespace gneiss {
+struct Program;
+}
+namespace gneiss::sema {
 
-/**
- * @brief Prints a complete AST to the configured output stream.
- *
- * @param program The program AST to print.
- */
-void print_ast(const Program& program);
+class Sema {
+public:
+    Sema(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {
+    }
 
-} // namespace gneiss::pretty
+    void analyze(Program& node);
+
+    // TODO: implement
+
+private:
+    DiagnosticEngine* diagnostic;
+};
+
+} // namespace gneiss::sema

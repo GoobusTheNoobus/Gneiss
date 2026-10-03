@@ -12,23 +12,13 @@
  * Gneiss is licenced under the MIT license
  */
 
-#pragma once
-#include "gneiss/ast.hpp"
+#include "gneiss/symbol.hpp"
 
-namespace gneiss::pretty {
+namespace gneiss::sema {
 
-/**
- * @brief Sets the output stream used by the pretty printer.
- *
- * @param os The stream to which AST output is written.
- */
-void set_stream(std::ostream* os);
+void Scope::define(Variable var) {
+    symbols[var.name] = std::move(var);
+}
+Scope::
 
-/**
- * @brief Prints a complete AST to the configured output stream.
- *
- * @param program The program AST to print.
- */
-void print_ast(const Program& program);
-
-} // namespace gneiss::pretty
+} // namespace gneiss::sema

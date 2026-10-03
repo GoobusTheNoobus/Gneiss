@@ -35,7 +35,8 @@ public:
      *
      * @param diagnostic diagnostic engine used to report lexical errors
      */
-    explicit Lexer(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
+    explicit Lexer(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {
+    }
 
     /**
      * @brief tokenizes a Gneiss source file

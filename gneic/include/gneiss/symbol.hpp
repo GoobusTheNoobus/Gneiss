@@ -13,22 +13,32 @@
  */
 
 #pragma once
-#include "gneiss/ast.hpp"
+#include "types.hpp"
 
-namespace gneiss::pretty {
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-/**
- * @brief Sets the output stream used by the pretty printer.
- *
- * @param os The stream to which AST output is written.
- */
-void set_stream(std::ostream* os);
+namespace gneiss::sema {
 
-/**
- * @brief Prints a complete AST to the configured output stream.
- *
- * @param program The program AST to print.
- */
-void print_ast(const Program& program);
+struct Variable {
+    std::string name;
+    Type type;
+};
 
-} // namespace gneiss::pretty
+struct Function {
+    std::string name;
+    std::vector<Type> overload;
+    Type return_type;
+};
+
+class Scope {
+    std::unordered_map<std::string, Variable> symbols;
+
+public:
+    void define(Variable);
+    std::optional<Variable> lookup(const std::string& name);
+};
+
+} // namespace gneiss::sema

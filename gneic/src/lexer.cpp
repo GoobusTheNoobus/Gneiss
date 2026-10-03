@@ -366,10 +366,21 @@ char Lexer::generate_escape(char c, size_t line_number) {
     }
 }
 
-bool Lexer::end() const { return position >= source.size(); }
-char Lexer::peek() const { return end() ? '\0' : source[position]; }
-char Lexer::peek(int i) const { return position >= source.size() - i ? '\0' : source[position + i]; }
-bool Lexer::check(char expected) const { return peek() == expected; }
+bool Lexer::end() const {
+    return position >= source.size();
+}
+
+char Lexer::peek() const {
+    return end() ? '\0' : source[position];
+}
+
+char Lexer::peek(int i) const {
+    return position >= source.size() - i ? '\0' : source[position + i];
+}
+
+bool Lexer::check(char expected) const {
+    return peek() == expected;
+}
 
 char Lexer::next() {
     if (end())

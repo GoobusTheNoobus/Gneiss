@@ -30,6 +30,11 @@ set(GNEISS_COMPILER_SOURCES
     include/gneiss/lexer.hpp
     include/gneiss/parser.hpp
     include/gneiss/token.hpp
+    include/gneiss/symbol.hpp
+    include/gneiss/types.hpp
+    include/gneiss/symbol.hpp
+    src/symbol.cpp
+    include/gneiss/sema.hpp
 )
 
 # main build

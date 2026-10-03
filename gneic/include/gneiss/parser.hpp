@@ -33,7 +33,8 @@ public:
      *
      * @param diagnostic diagnostic engine used to report syntax errors
      */
-    explicit Parser(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {}
+    explicit Parser(DiagnosticEngine* diagnostic) : diagnostic(diagnostic) {
+    }
 
     /**
      * @brief constructs AST from a list of token
@@ -47,7 +48,9 @@ private:
     std::unique_ptr<ASTNode> parse_statement();
 
     // Just a wrapper function to the lowest precedence function
-    std::unique_ptr<ASTNode> parse_expr() { return parse_equality_comp(); }
+    std::unique_ptr<ASTNode> parse_expr() {
+        return parse_equality_comp();
+    }
 
     // ==, !=
     std::unique_ptr<ASTNode> parse_equality_comp();

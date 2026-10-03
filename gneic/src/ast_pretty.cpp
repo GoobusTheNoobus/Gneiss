@@ -18,7 +18,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace gneiss::parse::pretty {
+namespace gneiss::pretty {
 
 namespace {
 
@@ -133,7 +133,9 @@ void print_identifier(const Identifier& identifier) {
     *out << std::string(indent, ' ') << "Identifier(" << identifier.name << ")\n";
 }
 
-void print_int(const LiteralInt& int_) { *out << std::string(indent, ' ') << "LiteralInt(" << int_.value << ")\n"; }
+void print_int(const LiteralInt& int_) {
+    *out << std::string(indent, ' ') << "LiteralInt(" << int_.value << ")\n";
+}
 void print_float(const LiteralFloat& float_) {
     *out << std::string(indent, ' ') << "LiteralFloat(" << float_.value << ")\n";
 }
@@ -216,7 +218,9 @@ void print_if(const StatementIf& stm) {
     indent -= 2;
 }
 
-void print_param(const StatementParameterDeclaration& stm) { *out << stm.type << ' ' << stm.name << ' '; }
+void print_param(const StatementParameterDeclaration& stm) {
+    *out << stm.type << ' ' << stm.name << ' ';
+}
 void print_var_declaration(const StatementVariableDeclaration& stm) {
     *out << std::string(indent, ' ') << "StatementVariableDeclaration(" << stm.name << ", "
          << (stm.type.empty() ? "<infer>" : stm.type) << ")\n";
@@ -251,7 +255,9 @@ void print_function_def(const StatementFunctionDefinition& stm) {
 
 } // namespace
 
-void set_stream(std::ostream* os) { out = os; }
+void set_stream(std::ostream* os) {
+    out = os;
+}
 
 void print_ast(const Program& program) {
     for (const auto& node : program.block.children) {
@@ -259,4 +265,4 @@ void print_ast(const Program& program) {
     }
 }
 
-} // namespace gneiss::parse::pretty
+} // namespace gneiss::pretty
